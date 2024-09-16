@@ -1,0 +1,77 @@
+# Write Kubernetes Deployment Script
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-catalog
+  template:
+    metadata:
+      labels:
+        app: book-catalog
+    spec:
+      containers: 
+      - name: book-catalog
+        image: book-catalog-apj:1
+        ports:
+        - containerPort: 8000
+        imagePullPolicy: Never
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://anjo_pgsql_user:7txvIYJYa0F31RNDn0zy4eSQO30K5Ehi@dpg-crb8vr23esus73afnasg-a.oregon-postgres.render.com/anjo_pgsql"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-catalog
+spec:
+  selector:
+    app: book-catalog
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+############
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-management
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory-management
+  template:
+    metadata:
+      labels:
+        app: inventory-management
+    spec:
+      containers: 
+      - name: inventory-management
+        image: inventory-management-apj:1
+        ports:
+        - containerPort: 8000
+        imagePullPolicy: Never
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://anjo_pgsql_user:7txvIYJYa0F31RNDn0zy4eSQO30K5Ehi@dpg-crb8vr23esus73afnasg-a.oregon-postgres.render.com/anjo_pgsql"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-management
+spec:
+  selector:
+    app: inventory-management
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
