@@ -1,13 +1,18 @@
-# Your Solution# Dockerfile for book_catalog microservice
+# Dockerfile for book_catalog microservice
 FROM python:3.11-alpine
 
 WORKDIR /app/
 
-COPY book_catalog/requirements.txt .
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./app /app
-COPY ./main.py /app
 
-CMD ["uvicorn", "app:main:app", "--host", "0.0.0.0", "--port", "8000"]
+COPY . .
+
+#COPY ./app /app
+
+#COPY ./main.py /app
+
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
